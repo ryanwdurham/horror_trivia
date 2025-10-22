@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👻 Horror Movie Trivia 👻</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&family=Rubik:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rubik', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0000 50%, #0a0a0a 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(139, 0, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 0, 0, 0.1) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+        
+        .blood-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            pointer-events: none;
+            z-index: 999;
+            overflow: hidden;
+        }
+        
+        .blood-drip {
+            position: absolute;
+            width: 2px;
+            background: linear-gradient(to bottom, #8B0000, transparent);
+            animation: drip 3s ease-in infinite;
+        }
+        
+        @keyframes drip {
+            0% {
+                height: 0;
+                opacity: 1;
+            }
+            50% {
+                height: 100px;
+                opacity: 0.8;
+            }
+            100% {
+                height: 150px;
+                opacity: 0;
+            }
+        }
+        
+        .ghost {
+            position: fixed;
+            font-size: 4rem;
+            opacity: 0.6;
+            animation: float 4s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+        }
+        
+        .ghost-left {
+            top: 100px;
+            left: 50px;
+            animation-delay: 0s;
+        }
+        
+        .ghost-right {
+            top: 100px;
+            right: 50px;
+            animation-delay: 2s;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(-5deg);
+                opacity: 0.4;
+            }
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+                opacity: 0.7;
+            }
+        }
+        
+        .fog {
+            position: fixed;
+            bottom: -50px;
+            left: 0;
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(to top, rgba(100, 100, 100, 0.2), transparent);
+            animation: fogMove 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        @keyframes fogMove {
+            0%, 100% { transform: translateX(-10%); opacity: 0.3; }
+            50% { transform: translateX(10%); opacity: 0.5; }
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .audio-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(26, 26, 26, 0.8);
+            border: 2px solid #8B0000;
+            border-radius: 10px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .audio-control:hover {
+            background: rgba(139, 0, 0, 0.3);
+            box-shadow: 0 0 15px rgba(139, 0, 0, 0.5);
+        }
+        
+        .title {
+            text-align: center;
+            margin-bottom: 20px;
+            animation: flicker 3s infinite;
+        }
+        
+        .title h1 {
+            font-family: 'Nosifer', cursive;
+            font-size: 3.5rem;
+            color: #8B0000;
+            text-shadow: 
+                0 0 10px #ff0000,
+                0 0 20px #ff0000,
+                0 0 30px #8B0000,
+                0 0 40px #8B0000;
+            margin-bottom: 10px;
+            letter-spacing: 3px;
+        }
+        
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            41%, 43%, 45% { opacity: 0.8; }
+            42%, 44% { opacity: 1; }
+        }
+        
+        .subtitle {
+            font-family: 'Creepster', cursive;
+            font-size: 1.3rem;
+            color: #999999;
+            text-shadow: 0 0 10px rgba(139, 0, 0, 0.5);
+        }
+        
+        .difficulty-screen {
+            text-align: center;
+            padding: 60px 20px;
+            animation: fadeIn 1s ease;
+        }
+        
+        .difficulty-screen h2 {
+            font-family: 'Creepster', cursive;
+            font-size: 2.5rem;
+            color: #ff6600;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(255, 102, 0, 0.6);
+        }
+        
+        .difficulty-screen p {
+            font-size: 1.2rem;
+            color: #999999;
+            margin-bottom: 40px;
+        }
+        
+        .difficulty-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .difficulty-btn {
+            padding: 20px 40px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            font-family: 'Rubik', sans-serif;
+            color: #ffffff;
+            background: linear-gradient(135deg, rgba(40, 40, 40, 0.8), rgba(20, 20, 20, 0.8));
+            border: 3px solid #666666;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .difficulty-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(139, 0, 0, 0.6);
+        }
+        
+        .difficulty-btn.easy {
+            border-color: #00ff00;
+        }
+        
+        .difficulty-btn.easy:hover {
+            background: linear-gradient(135deg, rgba(0, 100, 0, 0.6), rgba(0, 80, 0, 0.6));
+            border-color: #00ff00;
+        }
+        
+        .difficulty-btn.medium {
+            border-color: #ff6600;
+        }
+        
+        .difficulty-btn.medium:hover {
+            background: linear-gradient(135deg, rgba(139, 69, 0, 0.6), rgba(100, 50, 0, 0.6));
+            border-color: #ff9900;
+        }
+        
+        .difficulty-btn.hard {
+            border-color: #ff0000;
+        }
+        
+        .difficulty-btn.hard:hover {
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.6), rgba(100, 0, 0, 0.6));
+            border-color: #ff0000;
+        }
+        
+        .difficulty-description {
+            font-size: 0.9rem;
+            color: #666666;
+            margin-top: 8px;
+        }
+        
+        .progress-container {
+            background: rgba(26, 26, 26, 0.8);
+            border: 2px solid #8B0000;
+            border-radius: 15px;
+            padding: 15px 25px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(139, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .progress-text {
+            font-size: 1.1rem;
+            color: #cccccc;
+            font-weight: 700;
+        }
+        
+        .score {
+            color: #ff6600;
+            font-size: 1.3rem;
+            text-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
+        }
+        
+        .question-card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.95), rgba(40, 0, 0, 0.95));
+            border: 3px solid #8B0000;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 
+                0 10px 40px rgba(0, 0, 0, 0.8),
+                inset 0 0 30px rgba(139, 0, 0, 0.1);
+            animation: cardFloat 6s ease-in-out infinite;
+            backdrop-filter: blur(10px);
+        }
+        
+        @keyframes cardFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .question-text {
+            font-size: 1.5rem;
+            line-height: 1.6;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 40px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .answers {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .answer-option {
+            background: linear-gradient(135deg, rgba(40, 40, 40, 0.8), rgba(20, 20, 20, 0.8));
+            border: 2px solid #444444;
+            border-radius: 12px;
+            padding: 20px 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .answer-option:hover {
+            border-color: #8B0000;
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(139, 0, 0, 0.4);
+            background: linear-gradient(135deg, rgba(60, 0, 0, 0.8), rgba(40, 0, 0, 0.8));
+        }
+        
+        .answer-option.selected {
+            border-color: #ff6600;
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.6), rgba(80, 0, 0, 0.6));
+            box-shadow: 0 0 20px rgba(255, 102, 0, 0.4);
+        }
+        
+        .answer-option input[type="radio"] {
+            display: none;
+        }
+        
+        .answer-option label {
+            cursor: pointer;
+            display: block;
+            width: 100%;
+        }
+        
+        .trivia-fact {
+            background: linear-gradient(135deg, rgba(0, 50, 0, 0.3), rgba(0, 30, 0, 0.3));
+            border: 2px solid #00ff00;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            animation: fadeIn 0.5s ease;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+        }
+        
+        .trivia-fact.wrong {
+            background: linear-gradient(135deg, rgba(50, 0, 0, 0.3), rgba(30, 0, 0, 0.3));
+            border-color: #ff0000;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+        }
+        
+        .trivia-fact-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #00ff00;
+        }
+        
+        .trivia-fact.wrong .trivia-fact-title {
+            color: #ff6666;
+        }
+        
+        .trivia-fact-text {
+            color: #cccccc;
+            line-height: 1.5;
+        }
+        
+        .submit-btn {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 18px 40px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            font-family: 'Creepster', cursive;
+            color: #ffffff;
+            background: linear-gradient(135deg, #8B0000, #660000);
+            border: 3px solid #ff0000;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 5px 25px rgba(139, 0, 0, 0.5);
+        }
+        
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #a00000, #8B0000);
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(255, 0, 0, 0.6);
+        }
+        
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .feedback {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            min-height: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .feedback.correct {
+            color: #00ff00;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+        
+        .feedback.incorrect {
+            color: #ff0000;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+            20%, 40%, 60%, 80% { transform: translateX(10px); }
+        }
+        
+        .shake {
+            animation: shake 0.5s;
+        }
+        
+        .results-screen {
+            text-align: center;
+            padding: 60px 20px;
+            animation: fadeIn 1s ease;
+        }
+        
+        .results-screen h2 {
+            font-family: 'Nosifer', cursive;
+            font-size: 3rem;
+            color: #8B0000;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(139, 0, 0, 0.8);
+        }
+        
+        .final-score {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 30px 0;
+            color: #ffffff;
+        }
+        
+        .rank {
+            font-family: 'Creepster', cursive;
+            font-size: 2rem;
+            color: #ff6600;
+            margin: 30px 0;
+            text-shadow: 0 0 15px rgba(255, 102, 0, 0.6);
+        }
+        
+        .rank-message {
+            font-size: 1.2rem;
+            color: #999999;
+            margin: 20px 0 40px 0;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .play-again-btn, .exit-btn {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid;
+        }
+        
+        .play-again-btn {
+            background: linear-gradient(135deg, #8B0000, #660000);
+            color: #ffffff;
+            border-color: #ff0000;
+        }
+        
+        .play-again-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(139, 0, 0, 0.6);
+        }
+        
+        .exit-btn {
+            background: linear-gradient(135deg, #333333, #222222);
+            color: #cccccc;
+            border-color: #555555;
+        }
+        
+        .exit-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .ghost {
+                font-size: 2.5rem;
+            }
+            
+            .ghost-left {
+                left: 20px;
+            }
+            
+            .ghost-right {
+                right: 20px;
+            }
+            
+            .title h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .question-text {
+                font-size: 1.2rem;
+            }
+            
+            .answer-option {
+                padding: 15px 20px;
+                font-size: 1rem;
+            }
+            
+            .results-screen h2 {
+                font-size: 2rem;
+            }
+            
+            .final-score {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="blood-container" id="bloodContainer"></div>
+    <div class="ghost ghost-left">👻</div>
+    <div class="ghost ghost-right">👻</div>
+    <div class="fog"></div>
+    <div class="audio-control" id="audioControl" title="Toggle Sound">🔊</div>
+    
+    <div class="container">
+        <div class="title">
+            <h1>HORROR TRIVIA</h1>
+            <p class="subtitle">⚰️ Test Your Horror Knowledge... If You Dare ⚰️</p>
+        </div>
+        
+        <div id="difficultyScreen" class="difficulty-screen">
+            <h2>Choose Your Fate</h2>
+            <p>Select a difficulty level to begin...</p>
+            <div class="difficulty-buttons">
+                <button class="difficulty-btn easy" id="easyBtn">
+                    😌 EASY MODE
+                    <div class="difficulty-description">For casual horror fans</div>
+                </button>
+                <button class="difficulty-btn medium" id="mediumBtn">
+                    😰 MEDIUM MODE
+                    <div class="difficulty-description">For true horror enthusiasts</div>
+                </button>
+                <button class="difficulty-btn hard" id="hardBtn">
+                    😱 HARD MODE
+                    <div class="difficulty-description">For horror buffs only</div>
+                </button>
+            </div>
+        </div>
+        
+        <div id="gameScreen" class="hidden">
+            <div class="progress-container">
+                <p class="progress-text">
+                    Question <span id="currentQuestion">1</span> of <span id="totalQuestions">25</span> | 
+                    Score: <span class="score" id="score">0</span>
+                </p>
+            </div>
+            
+            <div class="question-card" id="questionCard">
+                <div class="question-text" id="questionText"></div>
+                <div class="answers" id="answersContainer"></div>
+            </div>
+            
+            <button class="submit-btn" id="submitBtn">Submit Answer</button>
+            <div class="feedback" id="feedback"></div>
+            <div id="triviaFactContainer"></div>
+        </div>
+        
+        <div id="resultsScreen" class="hidden">
+            <div class="results-screen">
+                <h2>⚰️ GAME OVER ⚰️</h2>
+                <div class="final-score">Your Score: <span id="finalScore">0</span> / 25</div>
+                <div class="rank" id="rankTitle"></div>
+                <div class="rank-message" id="rankMessage"></div>
+                <div class="action-buttons">
+                    <button class="play-again-btn" id="playAgainBtn">🎃 Play Again</button>
+                    <button class="exit-btn" onclick="window.close()">👻 Exit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Audio setup
+        let isMuted = false;
+        let ambientMusic = null;
+        let audioContext = null;
+        
+function initAudio() {
+  if (!ambientMusic) {
+    // Start with track 1
+    ambientMusic = new Audio('scary_clown_horror.mp3');
+    ambientMusic.volume = 0.3;
+    ambientMusic.loop = false;
+    ambientMusic.play().catch(err => console.log("First play blocked:", err));
+
+    ambientMusic.addEventListener('ended', () => {
+      playNextTrack('gothic_horror.mp3');
+    });
+  }
+
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
+}
+
+// Shared function to play the next track and alternate forever
+function playNextTrack(nextFile) {
+  const nextMusic = new Audio(nextFile);
+  nextMusic.volume = 0.3;
+  nextMusic.loop = false;
+
+  nextMusic.addEventListener('ended', () => {
+    // Alternate back and forth forever
+    const newFile =
+      nextFile === 'scary_clown_horror.mp3'
+        ? 'gothic_horror.mp3'
+        : 'scary_clown_horror.mp3';
+    playNextTrack(newFile);
+  });
+
+  nextMusic.play().then(() => {
+    console.log("Now playing:", nextFile);
+  }).catch(err => console.error("Autoplay blocked:", err));
+
+  ambientMusic = nextMusic; // update reference for mute toggle
+}
+
+
+        function playSound(type) {
+            if (isMuted || !audioContext) return;
+            
+            try {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                if (type === 'correct') {
+                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(1200, audioContext.currentTime + 0.1);
+                    gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                } else if (type === 'wrong') {
+                    oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(50, audioContext.currentTime + 0.3);
+                    gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                } else if (type === 'click') {
+                    oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
+                    gainNode.gain.setValueAtTime(0.08, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                }
+                
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 0.5);
+            } catch (e) {
+                console.error('Sound effect error:', e);
+            }
+        }
+        
+        function toggleAudio() {
+            initAudio();
+            
+            isMuted = !isMuted;
+            document.getElementById('audioControl').textContent = isMuted ? '🔇' : '🔊';
+            document.getElementById('audioControl').title = isMuted ? 'Sound Off' : 'Sound On';
+            
+            if (ambientMusic) {
+                if (isMuted) {
+                    ambientMusic.volume = 0;
+                    console.log('🔇 Music muted');
+                } else {
+                    ambientMusic.volume = 0.3;
+                    console.log('🔊 Music unmuted');
+                }
+            }
+        }
+        
+
+
+        // 100 Horror Movie Questions Database
+        const allQuestions = [];
+        
+        // Helper function to add questions
+        function addQ(question, answers, correct, difficulty, fact) {
+            allQuestions.push({
+                question: question,
+                answers: answers,
+                correct: correct,
+                difficulty: difficulty,
+                fact: fact
+            });
+        }
+        
+ // EASY QUESTIONS (30)
+addQ("In 'The Shining', what is the number of the hotel room Danny is warned to stay away from?", ["Room 117", "Room 237", "Room 313", "Room 666"], 1, "easy", "In Stephen King's novel it was 217, but Kubrick changed it to 237 for the film.");
+addQ("Who is the killer in the original 'Friday the 13th' movie?", ["Freddy Krueger", "Michael Myers", "Jason Voorhees", "Pamela Voorhees"], 3, "easy", "Jason’s mother was the killer in the original film!");
+addQ("Where does Freddy Krueger attack his victims in 'A Nightmare on Elm Street'?", ["In their homes", "In their dreams", "At school", "In the woods"], 1, "easy", "Freddy kills people in their dreams — making him unstoppable while you sleep.");
+addQ("What type of mask does Michael Myers wear in 'Halloween'?", ["Hockey mask", "William Shatner mask", "Clown mask", "Skull mask"], 1, "easy", "It was a Captain Kirk mask painted white for creepiness.");
+addQ("In 'The Exorcist', what is the name of the young girl who becomes possessed?", ["Carrie", "Regan", "Samara", "Rosemary"], 1, "easy", "Regan MacNeil’s possession terrified audiences in 1973.");
+addQ("What weapon does Jason Voorhees usually use to kill his victims?", ["Chainsaw", "Machete", "Axe", "Knife"], 1, "easy", "Jason’s machete became one of horror’s most iconic weapons.");
+addQ("What is the name of the motel in Alfred Hitchcock’s 'Psycho'?", ["Overlook Hotel", "Bates Motel", "Crystal Motel", "Shadow Motel"], 1, "easy", "The Bates Motel remains a symbol of psychological horror.");
+addQ("What is the name of the killer doll in 'Child’s Play'?", ["Puppet", "Chucky", "Annabelle", "Billy"], 1, "easy", "Brad Dourif voiced Chucky, the possessed doll.");
+addQ("What species of shark is featured in the movie 'Jaws'?", ["Tiger Shark", "Bull Shark", "Great White Shark", "Hammerhead Shark"], 2, "easy", "The mechanical shark was nicknamed 'Bruce' by the crew.");
+addQ("In what year was the original 'Halloween' movie released?", ["1975", "1978", "1980", "1982"], 1, "easy", "The movie was made on a tiny budget and became a classic.");
+addQ("In 'The Ring', how many days pass after someone watches the cursed videotape?", ["Three days", "Seven days", "Ten days", "Fourteen days"], 1, "easy", "The cursed video kills its viewers seven days later.");
+addQ("What colors are Freddy Krueger’s iconic striped sweater?", ["Black and white", "Red and green", "Blue and yellow", "Red and black"], 1, "easy", "Red and green were chosen because they visually clash the most.");
+addQ("Who are the paranormal investigators in 'The Conjuring'?", ["Ed and Lorraine Warren", "Sam and Dean", "Peter and Dana", "Jack and Wendy"], 0, "easy", "The Warrens were real-life paranormal investigators.");
+addQ("What is the name of the demonic clown in Stephen King’s 'IT'?", ["Captain Spaulding", "Pennywise", "Twisty", "Art the Clown"], 1, "easy", "Pennywise feeds on fear — and sometimes children.");
+addQ("What inspired the design of Ghostface’s mask in 'Scream'?", ["A ghost", "The painting 'The Scream'", "A skull", "A demon"], 1, "easy", "It was found in a real house during location scouting.");
+addQ("What is the name of the hotel in 'The Shining'?", ["Timberline Hotel", "Overlook Hotel", "Stanley Hotel", "Bates Motel"], 1, "easy", "The exterior shots were filmed at Oregon’s Timberline Lodge.");
+addQ("What is the name of the spaceship in 'Alien'?", ["Prometheus", "Nostromo", "Sulaco", "Covenant"], 1, "easy", "The ship’s name comes from a Joseph Conrad novel.");
+addQ("Which possessed doll appears in 'The Conjuring' universe?", ["Music box", "Annabelle", "Mirror", "Chair"], 1, "easy", "The real Annabelle is actually a Raggedy Ann doll.");
+addQ("What can the boy Cole see in 'The Sixth Sense'?", ["The future", "Dead people", "Demons", "Other dimensions"], 1, "easy", "The line 'I see dead people' became instantly iconic.");
+addQ("What type of creature is Count Dracula?", ["Werewolf", "Vampire", "Zombie", "Demon"], 1, "easy", "Dracula was inspired by Vlad the Impaler.");
+addQ("What supernatural ability does Carrie have in the film 'Carrie'?", ["Telekinesis", "Mind reading", "Invisibility", "Super strength"], 0, "easy", "Carrie can move objects with her mind.");
+addQ("What is the name of the summer camp in 'Friday the 13th'?", ["Camp Crystal Lake", "Camp Forest Green", "Camp Clear River", "Camp Alpine Lake"], 0, "easy", "Locals call it 'Camp Blood'.");
+addQ("What is Leatherface’s weapon of choice?", ["Axe", "Chainsaw", "Knife", "Hammer"], 1, "easy", "Surprisingly, there was little blood in the original movie.");
+addQ("Which monster is reanimated from body parts in Mary Shelley’s classic story?", ["The Mummy", "Frankenstein’s Monster", "The Wolfman", "The Creature"], 1, "easy", "Frankenstein is the scientist — not the monster!");
+addQ("What does Carol Anne famously say in 'Poltergeist'?", ["Help me", "I see them", "They’re here", "I’m scared"], 2, "easy", "That chilling line is one of horror’s most famous quotes.");
+addQ("What kills you seven days after watching the tape in 'The Ring'?", ["A blank tape", "A cursed recording", "A home video", "A music video"], 1, "easy", "It’s based on the Japanese horror 'Ringu'.");
+addQ("What does Hannibal Lecter famously eat?", ["Hearts", "Brains", "Human flesh", "Livers"], 2, "easy", "He pairs it with fava beans and a nice Chianti.");
+addQ("Where does 'The Texas Chainsaw Massacre' take place?", ["Oklahoma", "Texas", "Louisiana", "Arkansas"], 1, "easy", "The story was inspired by real killer Ed Gein.");
+addQ("What do zombies typically eat in classic horror films?", ["Blood", "Brains", "Flesh", "Souls"], 1, "easy", "The idea of brain-eating zombies came from 'Return of the Living Dead'.");
+addQ("On which holiday does the movie 'Halloween' take place?", ["Friday the 13th", "Halloween", "Christmas", "Valentine’s Day"], 1, "easy", "It’s the perfect movie for Halloween night!");
+
+// MEDIUM QUESTIONS (40)
+addQ("In 'Get Out', what is the name of the hypnotic trance state where Chris becomes trapped?", ["The Void", "The Sunken Place", "The Dark Zone", "The Shadow Realm"], 1, "medium", "The Sunken Place represents oppression and helplessness.");
+addQ("In what year was George Romero’s 'Night of the Living Dead' released?", ["1965", "1968", "1972", "1975"], 1, "medium", "It redefined the zombie genre forever.");
+addQ("In 'Hereditary', what disturbing sound does the character Charlie frequently make?", ["Humming", "Clicking her tongue", "Scratching", "Whispering"], 1, "medium", "The actress created the sound herself — eerie and unforgettable.");
+addQ("What is the favorite movie of the killers in 'Scream'?", ["Halloween", "Friday the 13th", "A Nightmare on Elm Street", "The Texas Chainsaw Massacre"], 0, "medium", "The movie revived the slasher genre in the 1990s.");
+addQ("What fictional town is the setting of 'Halloween'?", ["Springwood", "Haddonfield", "Crystal Lake", "Silent Hill"], 1, "medium", "Haddonfield is based on a real town in New Jersey.");
+addQ("What single word is repeatedly typed by Jack Torrance in 'The Shining'?", ["HELP", "REDRUM", "GET OUT", "All work and no play makes Jack a dull boy"], 3, "medium", "A chilling sign of his descent into madness.");
+addQ("What form does Pennywise often take in Stephen King’s 'IT'?", ["A spider", "A werewolf", "A clown", "A ghost"], 2, "medium", "The clown shape is the one that terrifies children most.");
+addQ("What is the house number on Elm Street in 'A Nightmare on Elm Street'?", ["1428", "666", "1340", "2237"], 0, "medium", "Freddy’s infamous address is 1428 Elm Street.");
+addQ("How many people go missing in 'The Blair Witch Project'?", ["Two", "Three", "Four", "Five"], 1, "medium", "The filmmakers used improvisation and real fear to capture authenticity.");
+addQ("What is the name of the cursed girl in 'The Ring'?", ["Samantha", "Samara", "Sarah", "Sandra"], 1, "medium", "Samara is based on a Japanese ghost legend.");
+addQ("What causes the apocalypse in '28 Days Later'?", ["Global War", "Rage virus", "Radiation", "Curse"], 1, "medium", "It introduced the terrifying idea of fast-moving zombies.");
+addQ("What is the name of the demonic nun in 'The Conjuring 2'?", ["Sister Mary", "Valak", "Bathsheba", "Annabelle"], 1, "medium", "Valak is inspired by a demon from the Ars Goetia.");
+addQ("What mark appears on Damien’s body in 'The Omen'?", ["666", "Pentagram", "Cross", "Skull"], 0, "medium", "It’s hidden beneath his hair — the mark of the beast.");
+addQ("In what year was 'The Exorcist' released?", ["1971", "1973", "1975", "1977"], 1, "medium", "Theaters actually offered 'fainting insurance' for terrified viewers.");
+addQ("What type of creatures hunt by sound in 'A Quiet Place'?", ["Aliens", "Sound-sensitive monsters", "Zombies", "Demons"], 1, "medium", "The film uses silence to build intense suspense.");
+addQ("What term does Jigsaw use for his deadly contraptions in the 'Saw' franchise?", ["Tests", "Games", "Trials", "Puzzles"], 1, "medium", "He insists that his victims are being 'tested'.");
+addQ("What is the name of the shy hotel clerk in 'Psycho'?", ["Norman Bates", "Norman Osborn", "Norman Baxter", "Blake Dunham"], 0, "medium", "Anthony Perkins’s performance became legendary.");
+addQ("Where are the characters trapped in 'The Descent'?", ["A cave system", "An abandoned mine", "A basement", "A tunnel"], 0, "medium", "The film was shot on sets designed to look like real caves.");
+addQ("What is the name of the demon in 'Paranormal Activity'?", ["Lucifer", "Toby", "Beelzebub", "Asmodeus"], 1, "medium", "Toby follows the family throughout the series.");
+addQ("What government facility controls the events in 'The Cabin in the Woods'?", ["A cult", "A secret government lab", "An underground facility", "Ancient gods"], 2, "medium", "It’s a meta take on horror movie tropes.");
+addQ("What is the name of the shark prop used in 'Jaws'?", ["Jaws", "Bruce", "Chomper", "Sharky"], 1, "medium", "Spielberg named the mechanical shark after his lawyer.");
+addQ("What dimension is visited in 'Insidious'?", ["The Shadow Realm", "The Further", "The Upside Down", "The Void"], 1, "medium", "The Further is a realm of tortured souls.");
+addQ("What type of animal is accused of witchcraft in 'The Witch'?", ["Dog", "Goat", "Pig", "Raven"], 1, "medium", "Black Phillip is the devil in disguise.");
+addQ("Who is the mother in 'The Babadook'?", ["Amelia", "Sarah", "Emily", "Rachel"], 0, "medium", "The movie uses horror as a metaphor for grief.");
+addQ("In 'Final Destination', what unstoppable force hunts the survivors?", ["A killer", "Death itself", "Bad luck", "A curse"], 1, "medium", "Every escape from death comes back to claim them.");
+addQ("What do the students find in the attic in 'Sinister'?", ["A diary", "Old home movies", "A body", "A ritual site"], 1, "medium", "The home videos reveal gruesome murders.");
+addQ("What is Chucky’s full human name before becoming a doll?", ["Charles Lee Ray", "Charlie Ray", "Chuck Roberts", "Charles Lewis"], 0, "medium", "He was a serial killer known as the Lakeshore Strangler.");
+addQ("What eerie game do the daughters play in 'The Conjuring'?", ["Ouija", "Hide and Clap", "Bloody Mary", "Light as a Feather"], 1, "medium", "The 'hide and clap' scene remains a masterclass in tension.");
+addQ("Where do the survivors take refuge in the 2004 remake of 'Dawn of the Dead'?", ["A school", "A shopping mall", "A hospital", "A police station"], 1, "medium", "The mall symbolizes consumerism and survival.");
+addQ("What is the name of the ghost ship in the 2002 film 'Ghost Ship'?", ["Antonia Graza", "Mary Celeste", "Flying Dutchman", "Black Pearl"], 0, "medium", "The opening scene is one of the most shocking in horror.");
+addQ("How many times must you say 'Candyman' in the mirror to summon him?", ["Three", "Five", "Seven", "Thirteen"], 1, "medium", "It’s a terrifying take on the Bloody Mary legend.");
+addQ("Where is 'Session 9' set?", ["Danvers State Hospital", "Arkham Asylum", "Shutter Island", "Pennhurst"], 0, "medium", "It was filmed in a real abandoned asylum.");
+addQ("What causes the curse in 'The Grudge'?", ["A ritual", "A violent death", "An artifact", "A disease"], 1, "medium", "The curse is born from extreme rage and sorrow.");
+addQ("In the 2014 film 'It Follows', what transfers the curse from one person to another?", ["Killing someone", "Sleeping with someone", "Touching someone", "Looking at someone"], 1, "medium", "The curse is passed through sexual contact — a metaphor for fear and guilt.");
+
+addQ("Where are the women exploring in 'The Descent'?", ["Caves in the Appalachian Mountains", "Caves in Britain", "Caves in Colorado", "Caves in France"], 1, "medium", "Filmed entirely on studio-built cave sets.");
+addQ("What’s hiding under the bed in 'The Conjuring'?", ["A demon", "A ghost", "Bathsheba", "A music box"], 3, "medium", "That music box scene left everyone afraid to look under their beds.");
+addQ("What word appears on the walls in 'The Evil Dead' cabin?", ["Dead", "Join us", "Run", "Help"], 1, "medium", "The words were added to enhance the sense of evil possession.");
+addQ("What household item becomes deadly in 'Christine'?", ["A doll", "A car", "A phone", "A mirror"], 1, "medium", "The film features a possessed Plymouth Fury.");
+
+// HARD QUESTIONS (20)
+addQ("What is the name of the goat in 'The Witch'?", ["Lucifer", "Black Phillip", "Beelzebub", "Salem"], 1, "hard", "The goat became a viral symbol of temptation and evil.");
+addQ("What is the name of the cult in 'Midsommar'?", ["The Hårga", "The Norsemen", "The Elders", "The Pagans"], 0, "hard", "The Hårga are based on Swedish folklore traditions.");
+addQ("Who are Rosemary’s suspicious neighbors in 'Rosemary’s Baby'?", ["The Woodhouses", "The Castevets", "The Bramfords", "The Hutchins"], 1, "hard", "They are part of a satanic cult living next door.");
+addQ("In which year was John Carpenter’s 'The Thing' released?", ["1978", "1980", "1982", "1984"], 2, "hard", "It was a box-office flop but later became a classic.");
+addQ("What is the name of the little boy in 'The Babadook'?", ["Samuel", "Oscar", "Daniel", "Thomas"], 0, "hard", "Samuel’s fear gives shape to the Babadook itself.");
+addQ("What is the name of the ship’s computer in 'Alien'?", ["HAL", "MOTHER", "VADER", "BISHOP"], 1, "hard", "The crew refers to the ship’s main computer as 'Mother'.");
+addQ("What French horror film features people being tortured to achieve enlightenment?", ["Inside", "Martyrs", "High Tension", "Frontiers"], 1, "hard", "A brutal film exploring suffering and transcendence.");
+addQ("In 'The Others', what is the shocking twist about the family?", ["They are ghosts", "They are demons", "They are in purgatory", "They are dreaming"], 0, "hard", "They discover they are the ghosts haunting their own home.");
+addQ("Who directed 'The Lighthouse'?", ["Jordan Peele", "Robert Eggers", "Ari Aster", "David Cronenberg"], 1, "hard", "A black-and-white descent into madness starring Dafoe and Pattinson.");
+addQ("What ancient text is used to summon the Deadites in 'Evil Dead'?", ["The Necronomicon", "Book of Shadows", "Book of the Dead", "Samhain Texts"], 0, "hard", "The Necronomicon Ex-Mortis unleashes evil when read aloud.");
+addQ("In 'Hereditary', what symbol is associated with the demon Paimon?", ["A triangle", "A crown", "An insect", "A star"], 1, "hard", "The crown represents his dominion as one of Hell’s kings.");
+addQ("What are the creatures called in 'A Quiet Place'?", ["Screamers", "Death Angels", "Silencers", "Hunters"], 1, "hard", "The aliens are blind but have hyper-sensitive hearing.");
+addQ("In 'Us', what are the underground doppelgängers called?", ["The Shadows", "The Tethered", "The Doubles", "The Others"], 1, "hard", "They are government experiments abandoned underground.");
+addQ("What is the name of the eerie videotape in 'The Ring'?", ["The Cursed Tape", "The Nightmare Tape", "The Death Tape", "The Ring Tape"], 0, "hard", "The tape is central to the curse’s spread.");
+addQ("Who plays the character Red in 'Us'?", ["Lupita Nyong’o", "Octavia Spencer", "Danai Gurira", "Keke Palmer"], 0, "hard", "Nyong’o created a haunting dual performance.");
+addQ("What film popularized the 'found footage' horror style in 1999?", ["The Blair Witch Project", "Paranormal Activity", "Cloverfield", "REC"], 0, "hard", "It was one of the most profitable films ever made.");
+addQ("What item connects the victims in 'Final Destination 3'?", ["A camera", "A roller coaster", "A plane", "A train"], 1, "hard", "A roller coaster vision begins the third film’s chaos.");
+addQ("In 'The Autopsy of Jane Doe', what do they discover Jane really is?", ["A witch", "A ghost", "A cursed body", "A vampire"], 0, "hard", "Her body is perfectly preserved — she’s a witch from the Salem era.");
+addQ("What is the monster’s weakness in 'It Follows'?", ["Salt", "Belief", "Passing it to another person", "Sunlight"], 2, "hard", "The curse is transferred through sexual contact.");
+addQ("What event inspired 'The Amityville Horror'?", ["A murder", "A haunting", "A ritual", "A possession"], 0, "hard", "The DeFeo murders in 1974 inspired the haunting tale.");
+
+
+
+        
+        // VERY HARD QUESTIONS (10)
+        addQ("Demon in 'The Exorcist'?", ["Belial", "Asmodeus", "Pazuzu", "Baphomet"], 2, "very hard", "Ancient Mesopotamian demon.");
+        addQ("City of dance academy in 'Suspiria' 1977?", ["Munich", "Freiburg", "Berlin", "Hamburg"], 1, "very hard", "Dario Argento's color masterpiece.");
+        addQ("Original Japanese title for 'The Ring'?", ["Kairo", "Ju-on", "Ringu", "Noroi"], 2, "very hard", "Based on Koji Suzuki novel.");
+        addQ("How many killed on-screen in 'Halloween' 1978?", ["Three", "Five", "Seven", "Ten"], 1, "very hard", "Focused on tension over gore.");
+        addQ("Killer inspired Buffalo Bill?", ["Ted Bundy", "Ed Gein", "Jeffrey Dahmer", "Gary Ridgway"], 1, "very hard", "Ed Gein inspired multiple films.");
+        addQ("Year filmmakers missing in 'Blair Witch'?", ["1994", "1995", "1996", "1997"], 0, "very hard", "First viral marketing campaign.");
+        addQ("Hotel manager in 'The Shining'?", ["Stuart Ullman", "Dick Hallorann", "Lloyd", "Delbert Grady"], 0, "very hard", "Gives Jack the job interview.");
+        addQ("Pinhead's actual designation?", ["Hell Priest", "Lead Cenobite", "Engineer", "High Priest"], 1, "very hard", "Never called Pinhead in original.");
+        addQ("Year of 'Peeping Tom'?", ["1956", "1960", "1966", "1970"], 1, "very hard", "Destroyed director's career.");
+        addQ("What's in sack in 'Audition'?", ["Money", "Clothes", "A body", "Tools"], 2, "very hard", "Starts as romance before horror.");
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let selectedAnswer = null;
+        let shuffledQuestions = [];
+        let selectedDifficulty = '';
+
+        function startGame(difficulty) {
+            initAudio();
+            playSound('click');
+            selectedDifficulty = difficulty;
+            
+            let filteredQuestions = [];
+            if (difficulty === 'easy') {
+                filteredQuestions = allQuestions.filter(q => q.difficulty === 'easy' || q.difficulty === 'medium');
+            } else if (difficulty === 'medium') {
+                filteredQuestions = allQuestions;
+            } else if (difficulty === 'hard') {
+                filteredQuestions = allQuestions.filter(q => q.difficulty === 'medium' || q.difficulty === 'hard' || q.difficulty === 'very hard');
+            }
+            
+            shuffledQuestions = shuffleArray(filteredQuestions).slice(0, 25);
+            currentQuestionIndex = 0;
+            score = 0;
+            selectedAnswer = null;
+            
+            document.getElementById('difficultyScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+            document.getElementById('resultsScreen').classList.add('hidden');
+            document.getElementById('totalQuestions').textContent = shuffledQuestions.length;
+            
+            showQuestion();
+        }
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function showQuestion() {
+            if (currentQuestionIndex >= shuffledQuestions.length) {
+                showResults();
+                return;
+            }
+
+            const question = shuffledQuestions[currentQuestionIndex];
+            
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            document.getElementById('score').textContent = score;
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('triviaFactContainer').innerHTML = '';
+            
+            const answersContainer = document.getElementById('answersContainer');
+            answersContainer.innerHTML = '';
+            
+            question.answers.forEach((answer, index) => {
+                const answerDiv = document.createElement('div');
+                answerDiv.className = 'answer-option';
+                answerDiv.innerHTML = `
+                    <input type="radio" name="answer" id="answer${index}" value="${index}">
+                    <label for="answer${index}">${answer}</label>
+                `;
+                
+                answerDiv.addEventListener('click', () => {
+                    playSound('click');
+                    document.querySelectorAll('.answer-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    answerDiv.classList.add('selected');
+                    document.getElementById(`answer${index}`).checked = true;
+                    selectedAnswer = index;
+                });
+                
+                answersContainer.appendChild(answerDiv);
+            });
+            
+            selectedAnswer = null;
+        }
+
+        function checkAnswer() {
+            if (selectedAnswer === null) {
+                document.getElementById('feedback').textContent = '⚠️ Please select an answer!';
+                document.getElementById('feedback').className = 'feedback incorrect';
+                playSound('wrong');
+                return;
+            }
+
+            const question = shuffledQuestions[currentQuestionIndex];
+            const feedback = document.getElementById('feedback');
+            const submitBtn = document.getElementById('submitBtn');
+            const triviaContainer = document.getElementById('triviaFactContainer');
+            
+            submitBtn.disabled = true;
+            
+            if (selectedAnswer === question.correct) {
+                score++;
+                feedback.textContent = '✓ CORRECT! 🎃';
+                feedback.className = 'feedback correct';
+                playSound('correct');
+                
+                triviaContainer.innerHTML = `
+                    <div class="trivia-fact">
+                        <div class="trivia-fact-title">🎬 Horror Trivia Fact:</div>
+                        <div class="trivia-fact-text">${question.fact}</div>
+                    </div>
+                `;
+            } else {
+                feedback.textContent = `✗ WRONG! Correct answer: ${question.answers[question.correct]}`;
+                feedback.className = 'feedback incorrect';
+                playSound('wrong');
+                
+                document.getElementById('questionCard').classList.add('shake');
+                setTimeout(() => {
+                    document.getElementById('questionCard').classList.remove('shake');
+                }, 500);
+                
+                triviaContainer.innerHTML = `
+                    <div class="trivia-fact wrong">
+                        <div class="trivia-fact-title">🎬 Horror Trivia Fact:</div>
+                        <div class="trivia-fact-text">${question.fact}</div>
+                    </div>
+                `;
+            }
+            
+            currentQuestionIndex++;
+            
+            setTimeout(() => {
+                submitBtn.disabled = false;
+                showQuestion();
+            }, 3500);
+        }
+
+        function showResults() {
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('resultsScreen').classList.remove('hidden');
+            document.getElementById('finalScore').textContent = score;
+            
+            let rank, message;
+            
+            if (score <= 5) {
+                rank = "🧟 ZOMBIE BRAIN 🧟";
+                message = "You know nothing... The horror has consumed you!";
+            } else if (score <= 10) {
+                rank = "👻 SCAREDY CAT 👻";
+                message = "You've seen a few scary movies, but you hid your eyes!";
+            } else if (score <= 15) {
+                rank = "🔪 SLASHER SURVIVOR 🔪";
+                message = "Not bad! You might make it through the first act!";
+            } else if (score <= 20) {
+                rank = "🎭 HORROR FANATIC 🎭";
+                message = "Impressive! You know your horror classics!";
+            } else {
+                rank = "👑 ULTIMATE HORROR BUFF 👑";
+                message = "OUTSTANDING! You ARE the final girl/guy!";
+            }
+            
+            document.getElementById('rankTitle').textContent = rank;
+            document.getElementById('rankMessage').textContent = message;
+        }
+
+        // Wait for page to load
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('audioControl').addEventListener('click', toggleAudio);
+            document.getElementById('submitBtn').addEventListener('click', checkAnswer);
+            document.getElementById('playAgainBtn').addEventListener('click', () => {
+                playSound('click');
+                document.getElementById('resultsScreen').classList.add('hidden');
+                document.getElementById('difficultyScreen').classList.remove('hidden');
+            });
+            
+            document.getElementById('easyBtn').addEventListener('click', () => startGame('easy'));
+            document.getElementById('mediumBtn').addEventListener('click', () => startGame('medium'));
+            document.getElementById('hardBtn').addEventListener('click', () => startGame('hard'));
+            
+            console.log('✅ Game initialized with', allQuestions.length, 'questions!');
+        });
+    </script>
+</body>
+</html>
