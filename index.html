@@ -756,6 +756,20 @@ function playNextTrack(nextFile) {
                 fact: fact
             });
         }
+
+        // Randomize correct answer order for variety
+function shuffleAnswers(questionObj) {
+  const { answers, correct } = questionObj;
+  const correctText = answers[correct];
+  const shuffled = answers.slice().sort(() => Math.random() - 0.5);
+  const newCorrect = shuffled.indexOf(correctText);
+  questionObj.answers = shuffled;
+  questionObj.correct = newCorrect;
+}
+
+// After all questions are added:
+allQuestions.forEach(q => shuffleAnswers(q));
+
         
  // EASY QUESTIONS (30)
 addQ("In 'The Shining', what is the number of the hotel room Danny is warned to stay away from?", ["Room 117", "Room 237", "Room 313", "Room 666"], 1, "easy", "In Stephen King's novel it was 217, but Kubrick changed it to 237 for the film.");
@@ -1126,6 +1140,7 @@ allQuestions.forEach(q => shuffleAnswers(q));
     </script>
 </body>
 </html>
+
 
 
 
