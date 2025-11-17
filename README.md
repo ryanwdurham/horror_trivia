@@ -19,7 +19,7 @@ Lightweight — no installs or frameworks needed
 
 🕹️ How to Play
 
-Open horror_trivia_mobile.html in your browser (or add it to your home screen).
+Open https://ryanwdurham.github.io/horror_trivia/ in your browser (or add it to your home screen).
 
 Tap the 🔊 icon once to enable sound.
 
